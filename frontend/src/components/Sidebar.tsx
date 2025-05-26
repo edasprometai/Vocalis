@@ -65,7 +65,7 @@ const Sidebar: React.FC<SidebarProps> = ({
     <div className="w-64 h-screen bg-slate-900/20 backdrop-blur-sm flex flex-col pt-16 border-r border-slate-800/50">
       <div className="flex-1 flex flex-col text-slate-300">
         <div className="p-4 pb-2">
-          <h2 className="text-lg font-semibold mb-4 text-emerald-400/90">Vocalis</h2>
+          <h2 className="text-lg font-semibold mb-4 text-emerald-400/90">Nadia</h2>
           
           {/* Tab Navigation */}
           <div className="flex border-b border-slate-800/50 mb-4">
@@ -161,14 +161,14 @@ const Sidebar: React.FC<SidebarProps> = ({
       </div>
       
       <div className="p-4 text-xs text-slate-500 border-t border-slate-800/50">
-        <p>Vocalis v1.5.0</p>
+        <p>Nadia v1.5.0</p>
         <a 
-          href="https://github.com/lex-au" 
+          href="https://github.com/" 
           target="_blank" 
           rel="noopener noreferrer"
           className="text-slate-500 hover:text-emerald-400 transition-colors"
         >
-          github.com/lex-au
+          github.com
         </a>
       </div>
       

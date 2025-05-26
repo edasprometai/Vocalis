@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.env
+*.egg-info/
+env/
+
+# Node
+node_modules/
+dist/
+.build/
+.next/
+
+env/lib/

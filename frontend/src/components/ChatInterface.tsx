@@ -2,9 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Mic, Loader2, Volume2, VolumeX, PhoneOff, Phone, Eye } from 'lucide-react';
 import { useInterval } from '../utils/hooks';
 import BackgroundStars from './BackgroundStars';
-import AssistantOrb from './AssistantOrb';
+//import AssistantOrb from './AssistantOrb';
+import PlexusOrb from './PlexusOrbAdvanced';
 import websocketService, { MessageType, ConnectionState } from '../services/websocket';
 import audioService, { AudioEvent, AudioState } from '../services/audio';
+import { useAudioAnalyzer } from '../hooks/useAudioAnalyzer';
 
 // Assistant state type
 type AssistantState = 'idle' | 'greeting' | 'listening' | 'processing' | 'speaking' | 'vision_file' | 'vision_processing' | 'vision_asr';
@@ -22,7 +24,7 @@ const ChatInterface: React.FC = () => {
   const [callActive, setCallActive] = useState(true);
   const [visionEnabled, setVisionEnabled] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
-  
+  const audioData = useAudioAnalyzer();
   // Vision-related state
   const [isVisionContext, setIsVisionContext] = useState(false);
   const [visionImageContext, setVisionImageContext] = useState<string | null>(null);
@@ -734,7 +736,26 @@ const ChatInterface: React.FC = () => {
           <div className={`
             transition-transform duration-500 ease-out
           `}>
-            <AssistantOrb state={assistantState} />
+              <PlexusOrb 
+    state={assistantState} 
+    audioData={new Uint8Array(audioData)}
+    config={{
+      nodeCount: 400,
+      connectionDistance: 1.10,
+      waveIntensity: 1.40,
+      glowIntensity: 3.0,
+      radius: 2.00,
+      audioScaling: 0.30,
+      nodeMovementScaling: 1.00,
+      nodeScaleMultiplier: 1.30,
+      tempo: 2.00,
+      rotationSpeed: 2.00,
+      bassMultiplier: 2.00,
+      midMultiplier: 2.00,
+      highMultiplier: 2.00,
+      beatIntensity: 0.60
+    }}
+  />
           </div>
           
           {/* Status messages */}
