@@ -103,8 +103,24 @@ interface EventListener {
   type: WebSocketEventType;
   callback: (data: any) => void;
 }
-
+// Helper to determine the backend host
+const getBackendHost = (): string => {
+  // If the UI is accessed via an IP address (not localhost),
+  // assume the backend is on the same IP.
+  // Otherwise, default to localhost (for local development).
+  if (window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1") {
+    return window.location.hostname;
+  }
+  // Fallback for local development or if BACKEND_HOST_IP was set in vite.config.ts
+  // This could also be an environment variable read by Vite.
+  // For simplicity, if you set a specific IP in vite.config.ts for proxy,
+  // you might want to ensure this service uses it too.
+  // However, deriving from window.location.hostname is often more robust for network access.
+  return "localhost"; // Default for local machine access
+};
+const WEBSOCKET_URL = `wss://${getBackendHost()}:8000/ws`; // Backend runs on port 8000
 // Main WebSocket service class
+console.log(`WebSocketService initialized with URL: ${WEBSOCKET_URL}`);
 export class WebSocketService {
   private socket: WebSocket | null = null;
   private url: string;
@@ -118,9 +134,9 @@ export class WebSocketService {
   
   // Track states that should prevent interrupt signals
   private isInGreetingFlow: boolean = false;
-
+  
   constructor(
-    url: string = 'ws://localhost:8000/ws', 
+    url: string  = WEBSOCKET_URL,
     autoReconnect: boolean = true,
     reconnectInterval: number = 3000,
     maxReconnectAttempts: number = 5

@@ -16,7 +16,7 @@ from .services.llm import LLMClient
 from .services.tts import TTSClient
 from .services.vision import vision_service
 from .routes.websocket import websocket_endpoint
-
+import os
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
@@ -123,4 +123,33 @@ async def websocket_route_endpoint(
     await websocket_endpoint(websocket, transcriber, llm_client, tts_client)
 
 if __name__ == "__main__":
-    uvicorn.run("backend.main:app", host=config.WEBSOCKET_HOST, port=config.WEBSOCKET_PORT, reload=True)
+    # Define paths to your SSL certificate and key files
+    # Assumes key.pem and cert.pem are in the same directory as this main.py (i.e., backend/)
+    # You should generate these using mkcert as previously described.
+    keyfile_path = os.path.join(os.path.dirname(__file__), "key.pem")
+    certfile_path = os.path.join(os.path.dirname(__file__), "cert.pem")
+
+    logger.info("Vocalis Backend Starting...")
+    if os.path.exists(keyfile_path) and os.path.exists(certfile_path):
+        logger.info(f"Found SSL certs. Attempting to start Uvicorn with HTTPS on port {config.WEBSOCKET_PORT}.")
+        logger.info(f"Keyfile: {os.path.abspath(keyfile_path)}")
+        logger.info(f"Certfile: {os.path.abspath(certfile_path)}")
+        uvicorn.run(
+            "backend.main:app", # Point to the FastAPI app instance
+            host=config.WEBSOCKET_HOST, # Should be "0.0.0.0"
+            port=config.WEBSOCKET_PORT,
+            reload=True, # Be cautious with reload if SSL certs are dynamically generated or change
+            ssl_keyfile=keyfile_path,
+            ssl_certfile=certfile_path
+        )
+    else:
+        logger.warning("SSL key file or certificate file not found in the backend directory.")
+        logger.warning(f"Expected keyfile at: {os.path.abspath(keyfile_path)}")
+        logger.warning(f"Expected certfile at: {os.path.abspath(certfile_path)}")
+        logger.warning("Uvicorn will start WITHOUT HTTPS. Microphone access from network devices will fail.")
+        uvicorn.run(
+            "backend.main:app",
+            host=config.WEBSOCKET_HOST,
+            port=config.WEBSOCKET_PORT,
+            reload=True
+        )
