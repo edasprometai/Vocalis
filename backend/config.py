@@ -20,8 +20,8 @@ TTS_API_ENDPOINT = os.getenv("TTS_API_ENDPOINT", "http://localhost:5005/v1/audio
 WHISPER_MODEL = os.getenv("WHISPER_MODEL", "tiny.en")
 
 # TTS Configuration
-TTS_MODEL = os.getenv("TTS_MODEL", "tts-1")
-TTS_VOICE = os.getenv("TTS_VOICE", "tara")
+TTS_MODEL = os.getenv("TTS_MODEL", "orpheus-3b-german-ft-q8_0")
+TTS_VOICE = os.getenv("TTS_VOICE", "jana")
 TTS_FORMAT = os.getenv("TTS_FORMAT", "wav")
 
 # WebSocket Server Configuration

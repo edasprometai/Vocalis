@@ -462,18 +462,19 @@ class WebSocketManager:
             str: The greeting prompt
         """
         user_name = self._get_user_name()
+        user_name_greeting = f" für {user_name}" if user_name else ""
         
         if user_name:
             if is_returning_user:
-                return f"Create a friendly greeting for {user_name} who just activated their microphone. Be brief and conversational, but treat it like you've met them before. Do not do anything else."
+                return f"Erstelle als NADIA eine freundliche deutsche Begrüßung{user_name_greeting}, der/die gerade das Mikrofon aktiviert hat. Fasse dich kurz und sei gesprächig, aber behandle ihn/sie so, als hättet ihr euch schon einmal getroffen. Die Begrüßung muss auf Deutsch sein. Antworte nur mit der Begrüßung.."
             else:
-                return f"Create a friendly greeting for {user_name} who just activated their microphone. Be brief and conversational, but treat it like you're meeting them for the first time. Do not do anything else."
+                return f"Erstelle als NADIA eine freundliche deutsche Begrüßung{user_name_greeting}, der/die gerade das Mikrofon aktiviert hat. Fasse dich kurz und sei gesprächig, aber behandle ihn/sie so, als würdet ihr euch zum ersten Mal treffen. Die Begrüßung muss auf Deutsch sein. Antworte nur mit der Begrüßung."
         else:
             if is_returning_user:
-                return "Create a friendly greeting for someone who just activated their microphone. Be brief and conversational, but treat it like you've met them before. Do not do anything else."
+                return f"Erstelle als NADIA eine freundliche deutsche Begrüßung für jemanden, der gerade das Mikrofon aktiviert hat. Fasse dich kurz und sei gesprächig, aber behandle ihn/sie so, als hättet ihr euch schon einmal getroffen. Die Begrüßung muss auf Deutsch sein. Antworte nur mit der Begrüßung."
             else:
-                return "Create a friendly greeting for someone who just activated their microphone. Be brief and conversational, but treat it like you're meeting them for the first time. Do not do anything else."
-    
+                return f"Erstelle als NADIA eine freundliche deutsche Begrüßung für jemanden, der gerade das Mikrofon aktiviert hat. Fasse dich kurz und sei gesprächig, aber behandle ihn/sie so, als würdet ihr euch zum ersten Mal treffen. Die Begrüßung muss auf Deutsch sein. Antworte nur mit der Begrüßung."
+
     def _get_followup_prompt(self, tier: int) -> str:
         """
         Get the follow-up prompt.

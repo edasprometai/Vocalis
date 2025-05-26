@@ -24,7 +24,7 @@ class LLMClient:
     def __init__(
         self,
         api_endpoint: str = "http://127.0.0.1:1234/v1/chat/completions",
-        model: str = "default",
+        model: str = "phi-4-q8_0",
         temperature: float = 0.7,
         max_tokens: int = 2048,
         timeout: int = 60

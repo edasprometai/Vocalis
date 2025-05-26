@@ -48,7 +48,7 @@ class WhisperTranscriber:
             self.device = "cuda" if torch.cuda.is_available() else "cpu"
         else:
             self.device = device
-            
+        self.device = self.device="cpu"
         # Select appropriate compute type based on device if not specified
         if compute_type is None:
             self.compute_type = "float16" if self.device == "cuda" else "int8"
@@ -119,7 +119,7 @@ class WhisperTranscriber:
             segments, info = self.model.transcribe(
                 audio, 
                 beam_size=self.beam_size,
-                language="en",  # Force English language
+                language="de",  # Force German language
                 vad_filter=False  # Disable VAD filter since we handle it in the frontend
             )
             
@@ -133,7 +133,7 @@ class WhisperTranscriber:
             
             metadata = {
                 "confidence": getattr(info, "avg_logprob", 0),
-                "language": getattr(info, "language", "en"),
+                "language": getattr(info, "language", "de"),
                 "processing_time": processing_time,
                 "segments_count": len(text_segments)
             }
@@ -162,7 +162,7 @@ class WhisperTranscriber:
             # Process the streaming transcription
             segments = self.model.transcribe_with_vad(
                 audio_generator,
-                language="en"
+                language="de"
             )
             
             # Yield each segment as it's transcribed
