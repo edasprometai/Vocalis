@@ -274,51 +274,49 @@ const PlexusOrb: React.FC<PlexusOrbProps> = ({ state = 'idle', audioData, config
   };
 
   // Map frequency ranges to sphere positions for realistic audio visualization
-  const getAudioWaveformValue = (nodeIndex: number, time: number): number => {
-    if ((state === 'listening' || state === 'speaking') && audioHistoryRef.current.length > 0) {
-      const sprite = nodeSpheresRef.current[nodeIndex];
-      if (!sprite || !sprite.userData) return 0;
-      
-      // Get the frequency index for this node
-      const frequencyIndex = sprite.userData.frequencyIndex || 0;
-      const audioValue = audioHistoryRef.current[frequencyIndex] || 0;
-      
-      // Map frequency to spatial regions
-      const normalizedLat = sprite.userData.normalizedLat || 0;
-      const freqRatio = frequencyIndex / maxHistoryLength;
-      
-      // Map frequency to spatial regions with configurable response
-      let spatialMultiplier = 1;
-      if (freqRatio < 0.3) {
-        // Bass frequencies - more active in bottom half
-        spatialMultiplier = normalizedLat > 0.6 ? config.bassMultiplier : 1.0;
-      } else if (freqRatio < 0.7) {
-        // Mid frequencies - active in middle band
-        const distanceFromEquator = Math.abs(normalizedLat - 0.5);
-        spatialMultiplier = config.midMultiplier - (distanceFromEquator * (config.midMultiplier - 1));
-      } else {
-        // High frequencies - more active in top half
-        spatialMultiplier = normalizedLat < 0.4 ? config.highMultiplier : 1.0;
-      }
-      
-      // Scale the audio response with configurable scaling
-      const scaledAudioValue = audioValue * config.audioScaling * spatialMultiplier;
-      
-      // Add gentle time-based variation for organic feel
-      const timeVariation = Math.sin(time * 1.5 + nodeIndex * 0.2) * 0.05;
-      
-      return (scaledAudioValue + timeVariation) * config.waveIntensity;
+const getAudioWaveformValue = (nodeIndex: number, time: number): number => {
+  if ((state === 'listening' || state === 'speaking') && audioHistoryRef.current.length > 0) {
+    const sprite = nodeSpheresRef.current[nodeIndex];
+    // It's good practice to handle cases where a sprite might not exist for an index
+    if (!sprite || !sprite.userData) {
+      // console.warn(`PlexusOrb: No sprite or userData for nodeIndex ${nodeIndex}`);
+      return 0; // Or a very small default wave if preferred
     }
-    
-    // Fallback to simulated waves for other states
-    const frequency = state === 'processing' ? 3 : 
-                     state === 'greeting' ? 2 : 0.5;
-    const amplitude = state === 'processing' ? 0.05 :
-                     state === 'greeting' ? 0.03 : 0.02;
-    
-    return Math.sin(time * frequency + nodeIndex * 0.1) * amplitude * config.waveIntensity;
-  };
 
+    const frequencyIndex = sprite.userData.frequencyIndex || 0;
+    // Ensure audioHistoryRef.current[frequencyIndex] is valid
+    const audioValue = (audioHistoryRef.current && audioHistoryRef.current[frequencyIndex] !== undefined)
+                       ? audioHistoryRef.current[frequencyIndex]
+                       : 0;
+
+    const normalizedLat = sprite.userData.normalizedLat || 0;
+    const freqRatio = frequencyIndex / maxHistoryLength; // maxHistoryLength should be defined or accessible
+
+    let spatialMultiplier = 1;
+    if (freqRatio < 0.3) {
+      spatialMultiplier = normalizedLat > 0.6 ? config.bassMultiplier : 1.0;
+    } else if (freqRatio < 0.7) {
+      const distanceFromEquator = Math.abs(normalizedLat - 0.5);
+      spatialMultiplier = config.midMultiplier - (distanceFromEquator * (config.midMultiplier - 1));
+    } else {
+      spatialMultiplier = normalizedLat < 0.4 ? config.highMultiplier : 1.0;
+    }
+
+    const scaledAudioValue = audioValue * config.audioScaling * spatialMultiplier;
+    const timeVariation = Math.sin(time * 1.5 + nodeIndex * 0.2) * 0.05;
+
+    return (scaledAudioValue + timeVariation) * config.waveIntensity; // <<< --- ADD THIS RETURN
+  }
+
+  // Fallback to simulated waves for other states OR if audioHistoryRef is empty
+  // console.log(`PlexusOrb (${state}): Using fallback wave`);
+  const frequency = state === 'processing' ? 3 :
+                   state === 'greeting' ? 2 : 0.5; // For 'idle' or if it falls through, freq = 0.5
+  const amplitude = state === 'processing' ? 0.05 :
+                   state === 'greeting' ? 0.03 : 0.02; // For 'idle' or if it falls through, amp = 0.02
+
+  return Math.sin(time * frequency + nodeIndex * 0.1) * amplitude * config.waveIntensity;
+};
   // Animation loop
   useEffect(() => {
     let waveTime = 0;
@@ -412,7 +410,6 @@ const PlexusOrb: React.FC<PlexusOrbProps> = ({ state = 'idle', audioData, config
         width: '208px', 
         height: '208px',
         position: 'relative',
-        background: 'radial-gradient(circle, rgba(10,10,10,0.8) 0%, rgba(0,0,0,1) 100%)'
       }}
     />
   );

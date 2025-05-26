@@ -738,7 +738,7 @@ const ChatInterface: React.FC = () => {
           `}>
               <PlexusOrb 
     state={assistantState} 
-    audioData={new Uint8Array(audioData)}
+    audioData={audioData}
     config={{
       nodeCount: 400,
       connectionDistance: 1.10,
