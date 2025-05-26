@@ -17,7 +17,7 @@ LLM_API_ENDPOINT = os.getenv("LLM_API_ENDPOINT", "http://127.0.0.1:1234/v1/chat/
 TTS_API_ENDPOINT = os.getenv("TTS_API_ENDPOINT", "http://localhost:5005/v1/audio/speech")
 
 # ASR (Whisper) Configuration
-ASR_MODEL_NAME = os.getenv("ASR_MODEL_NAME", "openai/whisper-medium") # Hardcoding to large-v3
+ASR_MODEL_NAME = os.getenv("ASR_MODEL_NAME", "openai/whisper-large-v3") # Hardcoding to large-v3
 ASR_DEVICE = os.getenv("ASR_DEVICE", "auto")  # "auto", "cuda", "cpu"
 ASR_TORCH_DTYPE = os.getenv("ASR_TORCH_DTYPE", "auto") # "auto", "float16", "bfloat16", "float32"
 # These will be used by the transcriber for its fixed German transcription task
@@ -37,7 +37,7 @@ WEBSOCKET_PORT = int(os.getenv("WEBSOCKET_PORT", 8000))
 # Audio Processing
 VAD_THRESHOLD = float(os.getenv("VAD_THRESHOLD", 0.5))
 VAD_BUFFER_SIZE = int(os.getenv("VAD_BUFFER_SIZE", 30))
-AUDIO_SAMPLE_RATE = int(os.getenv("AUDIO_SAMPLE_RATE", 48000))
+AUDIO_SAMPLE_RATE = int(os.getenv("AUDIO_SAMPLE_RATE", 16000))
 
 def get_config() -> Dict[str, Any]:
     """
