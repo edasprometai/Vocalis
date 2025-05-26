@@ -1,0 +1,12 @@
+fastapi==0.109.2
+uvicorn==0.27.1
+python-dotenv==1.0.1
+websockets==12.0
+numpy==1.26.4
+# faster-whisper==1.1.1 # Removed
+requests==2.31.0
+python-multipart==0.0.9
+torch>=2.0.1 # Ensure this is suitable for your target CUDA or CPU
+torchaudio>=0.13.1 # Ensure compatibility with torch
+ffmpeg-python==0.2.0
+transformers>=4.30.0 # Or a more recent version

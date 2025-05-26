@@ -16,8 +16,14 @@ load_dotenv()
 LLM_API_ENDPOINT = os.getenv("LLM_API_ENDPOINT", "http://127.0.0.1:1234/v1/chat/completions")
 TTS_API_ENDPOINT = os.getenv("TTS_API_ENDPOINT", "http://localhost:5005/v1/audio/speech")
 
-# Whisper Model Configuration
-WHISPER_MODEL = os.getenv("WHISPER_MODEL", "tiny.en")
+# ASR (Whisper) Configuration
+ASR_MODEL_NAME = os.getenv("ASR_MODEL_NAME", "openai/whisper-medium") # Hardcoding to large-v3
+ASR_DEVICE = os.getenv("ASR_DEVICE", "auto")  # "auto", "cuda", "cpu"
+ASR_TORCH_DTYPE = os.getenv("ASR_TORCH_DTYPE", "auto") # "auto", "float16", "bfloat16", "float32"
+# These will be used by the transcriber for its fixed German transcription task
+ASR_LANGUAGE = "de"
+ASR_TASK = "transcribe"
+#WHISPER_MODEL = os.getenv("WHISPER_MODEL", "tiny.en")
 
 # TTS Configuration
 TTS_MODEL = os.getenv("TTS_MODEL", "orpheus-3b-german-ft-q8_0")
@@ -43,7 +49,11 @@ def get_config() -> Dict[str, Any]:
     return {
         "llm_api_endpoint": LLM_API_ENDPOINT,
         "tts_api_endpoint": TTS_API_ENDPOINT,
-        "whisper_model": WHISPER_MODEL,
+        "asr_model_name": ASR_MODEL_NAME,
+        "asr_device": ASR_DEVICE,
+        "asr_torch_dtype": ASR_TORCH_DTYPE,
+        "asr_language": ASR_LANGUAGE, # Fixed to German
+        "asr_task": ASR_TASK,         # Fixed to transcribe
         "tts_model": TTS_MODEL,
         "tts_voice": TTS_VOICE,
         "tts_format": TTS_FORMAT,
