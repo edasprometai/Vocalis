@@ -44,7 +44,7 @@ const PlexusOrb: React.FC<PlexusOrbProps> = ({ state = 'idle', audioData, config
     connectionDistance: 1.10,
     waveIntensity: 1.40,
     glowIntensity: 3.0,
-    radius: 2.00,
+    radius: 8.00,
     audioScaling: 0.30,
     nodeMovementScaling: 1.00,
     nodeScaleMultiplier: 1.30,
@@ -407,8 +407,8 @@ const getAudioWaveformValue = (nodeIndex: number, time: number): number => {
     <div 
       ref={mountRef} 
       style={{ 
-        width: '208px', 
-        height: '208px',
+        width: '768px', 
+        height: '768px',
         position: 'relative',
       }}
     />
